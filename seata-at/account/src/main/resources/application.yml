@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: account
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost/seata_account?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+      username: root
+      password: root
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+mybatis-plus:
+  type-aliases-package: com.tm.account.entity
+  mapper-locations:
+    - classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.tm.account.mapper: debug
+
+#info:
+#  app:
+#    name: ${spring.application.name}
+#  company:
+#    name: www.baidu.com
+#  build:
+#    artifactId: @project.artifactId@
+#    version: @project.version@
