@@ -28,7 +28,6 @@ public class DataSourceConfig {
 
     @Bean
     public DynamicDataSource dynamicDataSource() {
-        // 初始化数据库
         List<HikariDataSource> hikariDataSourceList = new ArrayList<>(dbList.size());
         for (String db : dbList) {
             HikariConfig config = new HikariConfig("/" + db + ".properties");
@@ -40,7 +39,6 @@ public class DataSourceConfig {
     public static class DynamicDataSource {
 
         private List<HikariDataSource> hikariDataSourceList;
-        // 同一个线程共用一个数据库连接
         private ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();
 
         public DynamicDataSource(List<HikariDataSource> hikariDataSourceList) {
@@ -53,7 +51,6 @@ public class DataSourceConfig {
                 return connection;
             }
             connection = hikariDataSourceList.get(new Random().nextInt(hikariDataSourceList.size())).getConnection();
-            // 设置隔离级别为RC
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connectionThreadLocal.set(connection);
             return connection;

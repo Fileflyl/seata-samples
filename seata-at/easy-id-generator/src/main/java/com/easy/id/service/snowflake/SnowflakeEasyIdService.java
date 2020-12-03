@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author zhangbingbing
@@ -127,28 +126,12 @@ public class SnowflakeEasyIdService implements EasyIdService {
         return ((timestamp - startAt) << timestampShift) | (workId << workIdShift) | sequence;
     }
 
-    /**
-     * 等待下个毫秒，防止等待期间系统时钟被回调，导致方法一直轮询
-     */
     private long tillNextMill(long lastTimestamp) {
-        long timestamp;
-        long offset;
-        while (true) {
-            timestamp = now();
-            offset = lastTimestamp - timestamp;
-            if (offset < 0) {
-                return timestamp;
-            }
-            if (offset >= 5) { // 系统时钟回调时间大于5ms
-                throw new SystemClockCallbackException("timestamp check error,last timestamp " + lastTimestamp + ",now " + timestamp);
-            }
-            if (offset >= 2) { // 系统时钟回调时间大于等于2ms
-                try {
-                    TimeUnit.MILLISECONDS.sleep(offset);
-                } catch (InterruptedException ignore) {
-                }
-            }
+        long now = now();
+        while (now <= lastTimestamp) {
+            now = now();
         }
+        return now;
     }
 
     private long now() {

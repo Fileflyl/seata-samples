@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author zhangbingbing
@@ -29,13 +28,12 @@ public class SnowflakeEasyIdController {
     private EasyIdService easyIdService;
 
     @GetMapping("/next_id")
-    public String getNextId() {
-        return easyIdService.getNextId(null).toString();
+    public Long getNextId() {
+        return easyIdService.getNextId(null);
     }
 
     @GetMapping("/next_id/batches")
-    public Set<String> getNextId(@RequestParam(value = "batches_size", defaultValue = "100") Integer batchSize) {
-        return easyIdService.getNextIdBatch(null, batchSize).stream()
-                .map(Object::toString).collect(Collectors.toSet());
+    public Set<Long> getNextId(@RequestParam(value = "batches_size", defaultValue = "100") Integer batchSize) {
+        return easyIdService.getNextIdBatch(null, batchSize);
     }
 }
