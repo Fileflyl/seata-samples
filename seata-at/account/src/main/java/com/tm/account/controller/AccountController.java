@@ -25,6 +25,7 @@ public class AccountController {
     @GetMapping("/decrease")
     public String decrease(Long userId, BigDecimal money){
         this.accountService.decrease(userId,money);
+        System.out.println(111);
         return "用户账户扣减金额成功";
     }
 }
