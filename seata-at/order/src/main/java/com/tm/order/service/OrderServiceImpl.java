@@ -35,8 +35,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void create(Order order) {
-        Long orderId = Long.valueOf(new Random().nextInt(Integer.MAX_VALUE));
-        // Long orderId = easyIdGeneratorClient.nextId("order_business");
+        // Long orderId = Long.valueOf(new Random().nextInt(Integer.MAX_VALUE));
+        Long orderId = easyIdGeneratorClient.nextId("order_business");
         order.setId(orderId);
         orderMapper.create(order);
         //调用storage，修改库存
